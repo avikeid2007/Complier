@@ -1,0 +1,1 @@
+D:\Complier\src\C.Compiler\C.Compiler.csproj;arm64
