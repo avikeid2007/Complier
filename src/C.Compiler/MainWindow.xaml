@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:C.Compiler"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Turbo C"
+    Title="RetroC IDE"
     mc:Ignorable="d">
 
     <Grid x:Name="RootGrid" Background="#FF0000AA">
@@ -1232,7 +1232,7 @@
                             FontSize="14"
                             FontWeight="Bold"
                             Foreground="#FFFFFF55"
-                            Text="║        Turbo C  Version 3.0          ║" />
+                            Text="║         RetroC IDE  v1.0             ║" />
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontFamily="Consolas"
@@ -1244,13 +1244,19 @@
                             FontFamily="Consolas"
                             FontSize="14"
                             Foreground="#FFFFFFFF"
-                            Text="║   Copyright (c) 1992                 ║" />
+                            Text="║   Inspired by Borland Turbo C 3.0    ║" />
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontFamily="Consolas"
                             FontSize="14"
-                            Foreground="#FFFFFFFF"
-                            Text="║   Borland International              ║" />
+                            Foreground="#FF00AAAA"
+                            Text="║    Not affiliated with Borland /     ║" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="Consolas"
+                            FontSize="14"
+                            Foreground="#FF00AAAA"
+                            Text="║    Embarcadero Technologies          ║" />
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontFamily="Consolas"
@@ -1278,6 +1284,7 @@
                         <Button
                             Margin="0,8,0,0"
                             HorizontalAlignment="Center"
+                            HorizontalContentAlignment="Center"
                             Click="DlgAbout_OK"
                             Content="  OK  "
                             Style="{StaticResource DosDialogButtonStyle}" />

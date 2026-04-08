@@ -18,7 +18,7 @@
         <TextBlock Text="║                                      ║"
                    FontFamily="Consolas" FontSize="14" Foreground="#FF00AAAA"
                    HorizontalAlignment="Center"/>
-        <TextBlock Text="║        Turbo C IDE for WinUI         ║"
+        <TextBlock Text="║       RetroC IDE  v1.0               ║"
                    FontFamily="Consolas" FontSize="14" Foreground="#FFFFFF00"
                    HorizontalAlignment="Center" FontWeight="Bold"/>
         <TextBlock Text="║                                      ║"
@@ -30,22 +30,19 @@
         <TextBlock Text="║                                      ║"
                    FontFamily="Consolas" FontSize="14" Foreground="#FF00AAAA"
                    HorizontalAlignment="Center"/>
-        <TextBlock Text="║   A faithful recreation of the       ║"
+        <TextBlock Text="║   Inspired by Borland Turbo C 3.0    ║"
                    FontFamily="Consolas" FontSize="14" Foreground="#FFFFFFFF"
                    HorizontalAlignment="Center"/>
-        <TextBlock Text="║   classic Borland Turbo C 3.0 IDE    ║"
-                   FontFamily="Consolas" FontSize="14" Foreground="#FFFFFFFF"
-                   HorizontalAlignment="Center"/>
-        <TextBlock Text="║   using WinUI 3 / .NET 8             ║"
+        <TextBlock Text="║   Built with WinUI 3 / .NET 8        ║"
                    FontFamily="Consolas" FontSize="14" Foreground="#FFFFFFFF"
                    HorizontalAlignment="Center"/>
         <TextBlock Text="║                                      ║"
                    FontFamily="Consolas" FontSize="14" Foreground="#FF00AAAA"
                    HorizontalAlignment="Center"/>
-        <TextBlock Text="║   Original: Borland International    ║"
+        <TextBlock Text="║   Not affiliated with Borland or     ║"
                    FontFamily="Consolas" FontSize="14" Foreground="#FF00AAAA"
                    HorizontalAlignment="Center"/>
-        <TextBlock Text="║   Copyright (c) 1992                 ║"
+        <TextBlock Text="║   Embarcadero Technologies           ║"
                    FontFamily="Consolas" FontSize="14" Foreground="#FF00AAAA"
                    HorizontalAlignment="Center"/>
         <TextBlock Text="║                                      ║"

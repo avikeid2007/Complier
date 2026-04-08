@@ -35,5 +35,8 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 
+# MSIX/UWP/WinAppSDK app package output
+AppPackages/
+
 # macOS
 .DS_Store

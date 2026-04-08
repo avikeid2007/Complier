@@ -81,7 +81,7 @@ namespace C.Compiler
             };
 
             // Window setup — extend into title bar to remove Windows chrome
-            Title = "Turbo C";
+            Title = "RetroC IDE";
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(MenuBarGrid); // Menu bar doubles as drag region
 
@@ -684,21 +684,35 @@ namespace C.Compiler
             var doc = ActiveEditor.Document;
             doc.Content = ActiveEditor.GetText();
 
-            if (doc.IsNewFile)
+            string sourceFilePath;
+            bool usedTempFile = false;
+
+            if (doc.IsNewFile || doc.IsDirty)
             {
-                if (!await _fileService.SaveAsAsync(doc)) { AddMessage("Compilation cancelled — file not saved."); return; }
+                // Write to a temp file so the user never has to save manually
+                string tempDir = Path.Combine(Path.GetTempPath(), "TurboC");
+                Directory.CreateDirectory(tempDir);
+
+                // Use a stable name based on the doc so the EXE path is predictable
+                string safeName = doc.IsNewFile
+                    ? "noname"
+                    : Path.GetFileNameWithoutExtension(doc.FileName);
+                sourceFilePath = Path.Combine(tempDir, safeName + ".c");
+                await File.WriteAllTextAsync(sourceFilePath, doc.Content);
+                usedTempFile = doc.IsNewFile; // only treat as temp if truly unsaved
             }
-            else if (doc.IsDirty)
+            else
             {
-                await _fileService.SaveAsync(doc);
+                sourceFilePath = doc.FilePath!;
             }
 
             ClearMessages();
-            AddMessage($"Compiling {doc.FilePath}...");
+            string label = doc.IsNewFile ? $"(temp) {Path.GetFileName(sourceFilePath)}" : doc.FileName;
+            AddMessage($"Compiling {label}...");
 
             var result = compileOnly
-                ? await _compilerService.CompileAsync(doc.FilePath!)
-                : await _compilerService.MakeAsync(doc.FilePath!);
+                ? await _compilerService.CompileAsync(sourceFilePath)
+                : await _compilerService.MakeAsync(sourceFilePath);
 
             if (result.Success)
             {
@@ -714,6 +728,12 @@ namespace C.Compiler
                     foreach (var line in result.RawOutput.Split('\n', StringSplitOptions.RemoveEmptyEntries))
                         AddMessage(line.TrimEnd());
                 if (_currentErrors.Count > 0) ActiveEditor.GoToLine(_currentErrors[0].Line);
+            }
+
+            // Clean up temp .c source (keep the .exe so it can be run)
+            if (usedTempFile && result.Success && !compileOnly)
+            {
+                try { File.Delete(sourceFilePath); } catch { }
             }
         }
 
@@ -1058,7 +1078,7 @@ namespace C.Compiler
             CloseAllMenus();
             ClearMessages();
             AddMessage("═══════════════════════════════════════════════════════════════");
-            AddMessage("                 TURBO C 3.0 HELP — CONTENTS");
+            AddMessage("                 RETROC IDE — HELP CONTENTS");
             AddMessage("═══════════════════════════════════════════════════════════════");
             AddMessage("");
             AddMessage(" KEYBOARD SHORTCUTS:");

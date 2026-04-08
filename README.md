@@ -1,6 +1,244 @@
-# Turbo C 3.0 IDE Replica
+# RetroC IDE
 
-A pixel-perfect, feature-complete replica of the legendary **Turbo C 3.0 IDE** built with modern WinUI 3 and .NET 8. Nostalgic retro aesthetics meet contemporary C development workflows.
+<p align="center">
+  <img src="Assets/logo.png" alt="RetroC IDE Logo" width="180" />
+</p>
+
+<p align="center">
+  A pixel-perfect, open-source recreation of the classic <strong>Borland Turbo C 3.0 IDE</strong> aesthetic,<br/>
+  built with modern WinUI 3 and .NET 8.
+</p>
+
+> **⚠️ Disclaimer:** This project is **not affiliated with, endorsed by, or associated with** Borland International, Embarcadero Technologies, or Idera, Inc. "Turbo C" is a trademark of Embarcadero Technologies. This is an independent open-source project inspired by the visual design and UX of the original Turbo C 3.0 IDE (1991).
+
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![Platform](https://img.shields.io/badge/platform-Windows%2010%2B-blue)
+![Framework](https://img.shields.io/badge/framework-.NET%208-purple)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+---
+
+## 📸 Screenshots
+
+<p align="center">
+  <img src="Assets/Screenshot-Retro-C-IDE.png" alt="RetroC IDE — Main Editor" width="700" /><br/>
+  <em>Main editor with syntax highlighting, multi-tab support, and message panel</em>
+</p>
+
+<p align="center">
+  <img src="Assets/Screenshot-C-compiler.png" alt="RetroC IDE — Running a Program" width="700" /><br/>
+  <em>Compile and run without saving — output appears in a separate console window</em>
+</p>
+
+---
+
+## ✨ Features
+
+### **Visual Fidelity**
+- 🎨 **Authentic retro color scheme** — Blue editor (`#0000AA`), cyan borders (`#00AAAA`)
+- 📦 **Box-drawing borders** — Classic DOS-style window frames with responsive scaling
+- ⌨️ **Classic typography** — Consolas monospace for that authentic feel
+- 🔘 **Block cursor** — Blinking `█` cursor with 530ms animation cycle
+
+### **Editor Capabilities**
+- 📝 **Multi-tab editing** — Open unlimited files, switch with `F6` or `Alt+1..9`
+- ✂️ **Edit operations** — Undo/Redo, Cut/Copy/Paste, Clear
+- 🔍 **Find & Replace** — Case-sensitive search with Find Again / Find Previous
+- 🎯 **Go to Line** — Jump to specific line numbers with `Ctrl+G`
+- 🔎 **Find Procedure** — Jump to any function definition by name
+- 💾 **Dirty indicator** — Visual `*` in tab title for unsaved changes
+
+### **Compilation**
+- 🔨 **Bundled TCC compiler** — Tiny C Compiler (LGPL), auto-downloaded at first run
+- ⚡ **Compile without saving** — Run straight from an unsaved buffer via temp file
+- ⚡ **One-click build** — `Alt+F9` Compile, `F9` Make, `Ctrl+F9` Run
+- 📋 **Error navigation** — Click errors to jump to line; `Alt+F7`/`Alt+F8` cycle through
+- ⏱️ **Configurable timeout** — Prevent hung compiler processes (Options > Compiler)
+
+### **Syntax Highlighting**
+- 🌈 **Full C language** — 32+ keywords, 40+ standard library functions
+- 🔴 **Semantic coloring** — Keywords in red, stdlib in cyan, strings in yellow
+- ⚡ **Debounced** — 400ms idle delay prevents UI stalls on large files
+
+### **Menus — 100% wired**
+- All menus fully connected: File, Edit, Search, Run, Compile, Debug (stubs), Project (stubs), Options, Window, Help, System
+
+---
+
+## 🚀 Getting Started
+
+### **Prerequisites**
+- Windows 10 build 19041 or later
+- .NET 8 SDK
+
+### **Build from Source**
+```bash
+git clone https://github.com/yourusername/retroc-ide.git
+cd retroc-ide/src/C.Compiler
+
+# Build x64
+dotnet build -p:Platform=x64
+
+# Run
+dotnet run -p:Platform=x64
+```
+
+### **Pre-built Binary**
+Download the latest release from [Releases](https://github.com/yourusername/retroc-ide/releases), extract, and run `C.Compiler.exe`.
+
+---
+
+## 📖 Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `F2` | Save file |
+| `F3` | Open file |
+| `F9` | Make (compile + link) |
+| `Alt+F9` | Compile to OBJ only |
+| `Ctrl+F9` | Run program |
+| `Alt+F5` | User screen |
+| `F6` | Next editor tab |
+| `Alt+1..9` | Switch to tab N |
+| `Alt+F3` | Close tab |
+| `Alt+F7` / `Alt+F8` | Previous/Next error |
+| `Ctrl+G` | Go to line |
+| `Ctrl+F` | Find |
+| `Ctrl+H` | Find & Replace |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo |
+| `Alt+X` | Exit |
+| `F1` | Help |
+| `Ctrl+F1` | Topic Search |
+| `Escape` | Close menu / dialog |
+
+---
+
+## 🏗️ Architecture
+
+```
+src/C.Compiler/
+├── Controls/
+│   └── EditorControl.xaml(.cs)     # Rich editor with syntax highlighting & block cursor
+├── Models/
+│   ├── EditorDocument.cs            # File state & selection tracking
+│   ├── CompilerSettings.cs          # TCC configuration (path, flags, timeout, linker...)
+│   └── CompilerError.cs             # Parsed compiler diagnostics
+├── Services/
+│   ├── CompilerService.cs           # TCC/GCC/MSVC process management
+│   ├── FileService.cs               # File I/O
+│   ├── ProcessRunner.cs             # Async process execution with timeout
+│   ├── SettingsService.cs           # JSON persistence (LocalAppData)
+│   ├── SyntaxHighlighter.cs         # C tokenizer & coloring
+│   └── TccManager.cs                # TCC auto-download & discovery
+├── Dialogs/                         # Unused ContentDialog stubs (UI uses inline overlays)
+├── MainWindow.xaml(.cs)             # Shell: menus, tabs, overlays, accelerators
+└── App.xaml(.cs)                    # Entry point, theme
+```
+
+---
+
+## 🔧 Configuration
+
+Settings are persisted automatically to `%LOCALAPPDATA%\TurboC-IDE\settings.json`.
+
+### **Options > Compiler**
+| Field | Description |
+|-------|-------------|
+| Compiler path | Path to `tcc.exe`, `gcc.exe`, or `cl.exe` (blank = auto-detect) |
+| Include dirs | `;`-separated include paths |
+| Lib dirs | `;`-separated library search paths |
+| Output dir | Where `.obj` / `.exe` are written |
+| Flags | Extra compiler flags (e.g. `-Wall -g`) |
+| Timeout | Max seconds before killing a hung compile (default: 30) |
+
+### **Options > Linker**
+| Field | Description |
+|-------|-------------|
+| Linker flags | Extra flags passed at link step (e.g. `-lm`) |
+| Generate map file | `yes` / `no` |
+
+### **Options > Make**
+| Field | Description |
+|-------|-------------|
+| Primary source file | Override for multi-file projects |
+| Warnings as errors | `yes` / `no` |
+
+---
+
+## 📋 Compiler Compatibility
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| ANSI C (C89/C90) | ✅ Full | TCC fully supports |
+| C99 | ⚠️ Partial | TCC has limited C99 |
+| GCC / MinGW | ✅ Supported | Auto-detected on PATH |
+| MSVC (`cl.exe`) | ✅ Supported | Auto-detected on PATH |
+| Multi-file projects | ⏳ Planned | Currently single-file |
+| GDB debugging | ❌ Not planned | Use external GDB |
+
+---
+
+## 🚧 Known Limitations
+
+- **Windows only** — WinUI 3 is a Windows-exclusive framework
+- **No integrated debugger** — Debug menu items are stubs pending GDB integration
+- **No project files** — `.PRJ` multi-file project format not yet implemented
+- **No code completion** — Intentional (retro feel); can be added via LSP
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repo
+2. Create a branch: `git checkout -b feature/my-feature`
+3. Commit: `git commit -m 'Add my feature'`
+4. Push: `git push origin feature/my-feature`
+5. Open a Pull Request
+
+**Good first issues:**
+- GDB integration for Debug menu
+- `.PRJ` project file support
+- Line number gutter in editor
+- Unit tests for `CompilerService` and `SyntaxHighlighter`
+
+---
+
+## 📜 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+```
+Copyright (c) 2026 Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software...
+```
+
+---
+
+## 🙏 Acknowledgments
+
+- **Borland Turbo C 3.0** (1991) — Visual design and UX inspiration
+- **TCC (Tiny C Compiler)** — [Fabrice Bellard](https://bellard.org/tcc/) — LGPL, bundled compiler
+- **WinUI 3 / Windows App SDK** — Microsoft's modern Windows UI framework
+- **Consolas** — Microsoft's monospace font, perfect for retro IDEs
+
+---
+
+## 📞 Support
+
+- 🐛 **Bugs:** [Open an Issue](https://github.com/yourusername/retroc-ide/issues)
+- 💬 **Questions:** [Start a Discussion](https://github.com/yourusername/retroc-ide/discussions)
+
+---
+
+**Last Updated:** April 2026 | **Version:** 1.0.0
+
 
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2B-blue)
