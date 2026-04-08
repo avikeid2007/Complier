@@ -336,10 +336,10 @@
                             Height="1"
                             Margin="1,0"
                             Background="#FF555555" />
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="SysClearDesktop_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="C" /><Run Text="lear Desktop           " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="SysRepaintDesktop_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="R" /><Run Text="epaint Desktop         " /></TextBlock>
                         </Button>
                     </StackPanel>
@@ -376,7 +376,7 @@
                         <Button Click="FileSaveAs_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" Save " /><Run Foreground="#FFFF0000" Text="a" /><Run Text="s...                  " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="FileSaveAll_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" Save a" /><Run Foreground="#FFFF0000" Text="l" /><Run Text="l                    " /></TextBlock>
                         </Button>
                         <Border
@@ -386,7 +386,7 @@
                         <Button Click="ChangeDir_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="C" /><Run Text="hange dir...           " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="FilePrint_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="P" /><Run Text="rint                   " /></TextBlock>
                         </Button>
                         <Button Click="DosShell_Click" Style="{StaticResource DosMenuItemStyle}">
@@ -447,10 +447,10 @@
                             Height="1"
                             Margin="1,0"
                             Background="#FF555555" />
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="EditCopyExample_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" Copy " /><Run Foreground="#FFFF0000" Text="e" /><Run Text="xample                " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="EditShowClipboard_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="S" /><Run Text="how clipboard            " /></TextBlock>
                         </Button>
                     </StackPanel>
@@ -498,7 +498,7 @@
                             Height="1"
                             Margin="1,0"
                             Background="#FF555555" />
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="FindProcedure_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" Find " /><Run Foreground="#FFFF0000" Text="p" /><Run Text="rocedure...              " /></TextBlock>
                         </Button>
                         <Button Style="{StaticResource DosMenuItemStyle}">
@@ -535,16 +535,16 @@
                         <Button Click="RunProgram_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="R" /><Run Text="un            Ctrl+F9  " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="RunReset_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="P" /><Run Text="rogram reset  Ctrl+F2  " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="RunGoToCursor_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="G" /><Run Text="o to cursor      F4    " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="RunTraceInto_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="T" /><Run Text="race into        F7    " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="RunStepOver_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="S" /><Run Text="tep over         F8    " /></TextBlock>
                         </Button>
                         <Border
@@ -595,7 +595,7 @@
                             Height="1"
                             Margin="1,0"
                             Background="#FF555555" />
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="CompilePrimaryFile_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="P" /><Run Text="rimary C file...       " /></TextBlock>
                         </Button>
                         <Button Click="GetInfo_Click" Style="{StaticResource DosMenuItemStyle}">
@@ -623,16 +623,16 @@
                     BorderThickness="1"
                     CornerRadius="0">
                     <StackPanel MinWidth="280">
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="DebugEvaluate_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="E" /><Run Text="valuate/modify Ctrl+F4 " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="DebugWatches_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="W" /><Run Text="atches                 " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="DebugToggleBreakpoint_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="T" /><Run Text="oggle breakpoint Ctrl+F8" /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="DebugBreakpoints_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="B" /><Run Text="reakpoints...          " /></TextBlock>
                         </Button>
                     </StackPanel>
@@ -657,30 +657,30 @@
                     BorderThickness="1"
                     CornerRadius="0">
                     <StackPanel MinWidth="240">
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="ProjectOpen_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="O" /><Run Text="pen project...         " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="ProjectClose_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="C" /><Run Text="lose project           " /></TextBlock>
                         </Button>
                         <Border
                             Height="1"
                             Margin="1,0"
                             Background="#FF555555" />
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="ProjectAddItem_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="A" /><Run Text="dd item...             " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="ProjectDeleteItem_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="D" /><Run Text="elete item             " /></TextBlock>
                         </Button>
                         <Border
                             Height="1"
                             Margin="1,0"
                             Background="#FF555555" />
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="ProjectLocalOptions_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="L" /><Run Text="ocal options...        " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="ProjectIncludeFiles_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="I" /><Run Text="nclude files...        " /></TextBlock>
                         </Button>
                     </StackPanel>
@@ -708,10 +708,10 @@
                         <Button Click="OptionsCompiler_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="C" /><Run Text="ompiler...             " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="OptionsLinker_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="L" /><Run Text="inker...               " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="OptionsMake_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="M" /><Run Text="ake...                 " /></TextBlock>
                         </Button>
                         <Border
@@ -721,20 +721,20 @@
                         <Button Click="OptionsDirectories_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="D" /><Run Text="irectories...          " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="OptionsArguments_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="A" /><Run Text="rguments...            " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="OptionsEnvironment_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="E" /><Run Text="nvironment             " /></TextBlock>
                         </Button>
                         <Border
                             Height="1"
                             Margin="1,0"
                             Background="#FF555555" />
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="OptionsSaveOptions_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="S" /><Run Text="ave options...         " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="OptionsRetrieveOptions_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="R" /><Run Text="etrieve options...     " /></TextBlock>
                         </Button>
                     </StackPanel>
@@ -759,16 +759,16 @@
                     BorderThickness="1"
                     CornerRadius="0">
                     <StackPanel MinWidth="280">
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="WindowSizeMove_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="S" /><Run Text="ize/Move    Ctrl+F5    " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="WindowZoom_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="Z" /><Run Text="oom            F5      " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="WindowTile_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="T" /><Run Text="ile                    " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="WindowCascade_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="C" /><Run Text="ascade                 " /></TextBlock>
                         </Button>
                         <Button Click="WindowNext_Click" Style="{StaticResource DosMenuItemStyle}">
@@ -790,16 +790,16 @@
                         <Button Click="ToggleMessageWindow_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="M" /><Run Text="essage                 " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="WindowOutput_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="O" /><Run Text="utput                  " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="WindowWatch_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="W" /><Run Text="atch                   " /></TextBlock>
                         </Button>
                         <Button Click="UserScreen_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="U" /><Run Text="ser screen    Alt+F5   " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="WindowRegister_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="R" /><Run Text="egister                " /></TextBlock>
                         </Button>
                         <Button IsEnabled="False" Style="{StaticResource DosMenuItemStyle}">
@@ -843,17 +843,17 @@
                         <Button Click="HelpIndex_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="I" /><Run Text="ndex          Shift+F1 " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="HelpTopicSearch_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="T" /><Run Text="opic search   Ctrl+F1  " /></TextBlock>
                         </Button>
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="HelpPreviousTopic_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="P" /><Run Text="revious topic Alt+F1   " /></TextBlock>
                         </Button>
                         <Border
                             Height="1"
                             Margin="1,0"
                             Background="#FF555555" />
-                        <Button Style="{StaticResource DosMenuItemStyle}">
+                        <Button Click="HelpOnHelp_Click" Style="{StaticResource DosMenuItemStyle}">
                             <TextBlock FontFamily="Consolas" FontSize="13"><Run Text=" " /><Run Foreground="#FFFF0000" Text="H" /><Run Text="elp on help            " /></TextBlock>
                         </Button>
                         <Border
@@ -1437,6 +1437,294 @@
                                 Style="{StaticResource DosDialogButtonStyle}" />
                             <Button
                                 Click="DlgDirectories_Cancel"
+                                Content="Cancel"
+                                Style="{StaticResource DosDialogButtonStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!--  LINKER OPTIONS DIALOG  -->
+        <Grid
+            x:Name="LinkerDialogOverlay"
+            Grid.RowSpan="3"
+            Background="Transparent"
+            Visibility="Collapsed">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border
+                    Margin="4,4,0,0"
+                    Background="#FF000000"
+                    CornerRadius="0" />
+                <Border
+                    Margin="0,0,4,4"
+                    Padding="12"
+                    Background="#FF0000AA"
+                    BorderBrush="#FF00AAAA"
+                    BorderThickness="2"
+                    CornerRadius="0">
+                    <StackPanel MinWidth="420" Spacing="8">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="Consolas"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="#FF00AAAA"
+                            Text="Linker Options" />
+                        <StackPanel Spacing="3">
+                            <TextBlock
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="#FFFFFF55"
+                                Text="Additional linker flags:" />
+                            <TextBox
+                                x:Name="DlgLinkerFlags"
+                                Background="#FF000055"
+                                BorderBrush="#FF00AAAA"
+                                BorderThickness="1"
+                                CornerRadius="0"
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="#FFFFFFFF"
+                                PlaceholderText="e.g. -lm -lpthread" />
+                        </StackPanel>
+                        <StackPanel Spacing="3">
+                            <TextBlock
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="#FFFFFF55"
+                                Text="Generate map file (yes/no):" />
+                            <TextBox
+                                x:Name="DlgLinkerMapFile"
+                                Background="#FF000055"
+                                BorderBrush="#FF00AAAA"
+                                BorderThickness="1"
+                                CornerRadius="0"
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="#FFFFFFFF"
+                                PlaceholderText="no" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="0,4,0,0"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <Button
+                                Click="DlgLinker_OK"
+                                Content="  OK  "
+                                Style="{StaticResource DosDialogButtonStyle}" />
+                            <Button
+                                Click="DlgLinker_Cancel"
+                                Content="Cancel"
+                                Style="{StaticResource DosDialogButtonStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!--  MAKE OPTIONS DIALOG  -->
+        <Grid
+            x:Name="MakeDialogOverlay"
+            Grid.RowSpan="3"
+            Background="Transparent"
+            Visibility="Collapsed">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border
+                    Margin="4,4,0,0"
+                    Background="#FF000000"
+                    CornerRadius="0" />
+                <Border
+                    Margin="0,0,4,4"
+                    Padding="12"
+                    Background="#FF0000AA"
+                    BorderBrush="#FF00AAAA"
+                    BorderThickness="2"
+                    CornerRadius="0">
+                    <StackPanel MinWidth="420" Spacing="8">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="Consolas"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="#FF00AAAA"
+                            Text="Make Options" />
+                        <StackPanel Spacing="3">
+                            <TextBlock
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="#FFFFFF55"
+                                Text="Primary source file (blank = active file):" />
+                            <TextBox
+                                x:Name="DlgMakePrimaryFile"
+                                Background="#FF000055"
+                                BorderBrush="#FF00AAAA"
+                                BorderThickness="1"
+                                CornerRadius="0"
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="#FFFFFFFF"
+                                PlaceholderText="e.g. main.c" />
+                        </StackPanel>
+                        <StackPanel Spacing="3">
+                            <TextBlock
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="#FFFFFF55"
+                                Text="Treat warnings as errors (yes/no):" />
+                            <TextBox
+                                x:Name="DlgMakeWarnings"
+                                Background="#FF000055"
+                                BorderBrush="#FF00AAAA"
+                                BorderThickness="1"
+                                CornerRadius="0"
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                Foreground="#FFFFFFFF"
+                                PlaceholderText="no" />
+                        </StackPanel>
+                        <StackPanel
+                            Margin="0,4,0,0"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <Button
+                                Click="DlgMake_OK"
+                                Content="  OK  "
+                                Style="{StaticResource DosDialogButtonStyle}" />
+                            <Button
+                                Click="DlgMake_Cancel"
+                                Content="Cancel"
+                                Style="{StaticResource DosDialogButtonStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!--  TOPIC SEARCH DIALOG  -->
+        <Grid
+            x:Name="TopicSearchDialogOverlay"
+            Grid.RowSpan="3"
+            Background="Transparent"
+            Visibility="Collapsed">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border
+                    Margin="4,4,0,0"
+                    Background="#FF000000"
+                    CornerRadius="0" />
+                <Border
+                    Margin="0,0,4,4"
+                    Padding="12"
+                    Background="#FF0000AA"
+                    BorderBrush="#FF00AAAA"
+                    BorderThickness="2"
+                    CornerRadius="0">
+                    <StackPanel MinWidth="380" Spacing="10">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="Consolas"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="#FF00AAAA"
+                            Text="Topic Search" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock
+                                Width="50"
+                                VerticalAlignment="Center"
+                                FontFamily="Consolas"
+                                FontSize="13"
+                                Foreground="#FFFFFF55"
+                                Text="Topic:" />
+                            <TextBox
+                                x:Name="DlgTopicSearchBox"
+                                Width="280"
+                                Padding="4,2"
+                                Background="#FF000055"
+                                BorderBrush="#FF00AAAA"
+                                BorderThickness="1"
+                                CornerRadius="0"
+                                FontFamily="Consolas"
+                                FontSize="13"
+                                Foreground="#FFFFFFFF"
+                                PlaceholderText="e.g. printf, malloc, for" />
+                        </StackPanel>
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <Button
+                                Click="DlgTopicSearch_OK"
+                                Content="  OK  "
+                                Style="{StaticResource DosDialogButtonStyle}" />
+                            <Button
+                                Click="DlgTopicSearch_Cancel"
+                                Content="Cancel"
+                                Style="{StaticResource DosDialogButtonStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!--  FIND PROCEDURE DIALOG  -->
+        <Grid
+            x:Name="FindProcedureDialogOverlay"
+            Grid.RowSpan="3"
+            Background="Transparent"
+            Visibility="Collapsed">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border
+                    Margin="4,4,0,0"
+                    Background="#FF000000"
+                    CornerRadius="0" />
+                <Border
+                    Margin="0,0,4,4"
+                    Padding="12"
+                    Background="#FF0000AA"
+                    BorderBrush="#FF00AAAA"
+                    BorderThickness="2"
+                    CornerRadius="0">
+                    <StackPanel MinWidth="380" Spacing="10">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="Consolas"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="#FF00AAAA"
+                            Text="Find Procedure" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock
+                                Width="85"
+                                VerticalAlignment="Center"
+                                FontFamily="Consolas"
+                                FontSize="13"
+                                Foreground="#FFFFFF55"
+                                Text="Function:" />
+                            <TextBox
+                                x:Name="DlgFindProcedureBox"
+                                Width="250"
+                                Padding="4,2"
+                                Background="#FF000055"
+                                BorderBrush="#FF00AAAA"
+                                BorderThickness="1"
+                                CornerRadius="0"
+                                FontFamily="Consolas"
+                                FontSize="13"
+                                Foreground="#FFFFFFFF"
+                                PlaceholderText="e.g. main, myFunction" />
+                        </StackPanel>
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <Button
+                                Click="DlgFindProcedure_OK"
+                                Content="  OK  "
+                                Style="{StaticResource DosDialogButtonStyle}" />
+                            <Button
+                                Click="DlgFindProcedure_Cancel"
                                 Content="Cancel"
                                 Style="{StaticResource DosDialogButtonStyle}" />
                         </StackPanel>

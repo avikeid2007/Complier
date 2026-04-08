@@ -9,5 +9,9 @@ namespace C.Compiler.Models
         public string OutputDirectory { get; set; } = string.Empty;
         public string AdditionalFlags { get; set; } = string.Empty;
         public int TimeoutSeconds { get; set; } = 30; // Compilation timeout in seconds
+        public string LinkerFlags { get; set; } = string.Empty;
+        public bool GenerateMapFile { get; set; }
+        public string PrimarySourceFile { get; set; } = string.Empty;
+        public bool WarningsAsErrors { get; set; }
     }
 }

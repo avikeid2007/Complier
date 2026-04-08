@@ -39,6 +39,7 @@ namespace C.Compiler
         private string? _lastCompiledExePath;
         private string _programArguments = string.Empty;
         private int _errorIndex;
+        private string _lastHelpTopic = string.Empty;
 
         // Menu system state
         private readonly Popup[] _menuPopups;
@@ -421,6 +422,32 @@ namespace C.Compiler
 
         private void ChangeDir_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage($"Current directory: {Environment.CurrentDirectory}"); }
 
+        private async void FileSaveAll_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            int saved = 0;
+            foreach (var editor in _editors)
+            {
+                editor.Document.Content = editor.GetText();
+                if (editor.Document.IsDirty)
+                {
+                    if (editor.Document.IsNewFile)
+                        await _fileService.SaveAsAsync(editor.Document);
+                    else
+                        await _fileService.SaveAsync(editor.Document);
+                    saved++;
+                }
+            }
+            UpdateTabHeaders();
+            AddMessage(saved > 0 ? $"Saved {saved} file(s)." : "No unsaved files.");
+        }
+
+        private void FilePrint_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            AddMessage("Print: Printing is not supported in this version. Use File > Save and print from Notepad or another editor.");
+        }
+
         private void DosShell_Click(object sender, RoutedEventArgs e)
         {
             CloseAllMenus();
@@ -446,6 +473,40 @@ namespace C.Compiler
         private void EditCopy_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); ActiveEditor.Copy(); }
         private void EditPaste_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); ActiveEditor.Paste(); }
         private void EditClear_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); ActiveEditor.ClearSelection(); }
+
+        private void EditCopyExample_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            const string example =
+                "#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}";
+            ActiveEditor.InsertText(example);
+            AddMessage("Example code inserted at cursor.");
+        }
+
+        private async void EditShowClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            try
+            {
+                var dataPackageView = Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
+                if (dataPackageView.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text))
+                {
+                    string text = await dataPackageView.GetTextAsync();
+                    ClearMessages();
+                    AddMessage("═══ Clipboard Contents ═══");
+                    foreach (var line in text.Split('\n'))
+                        AddMessage(line.TrimEnd());
+                }
+                else
+                {
+                    AddMessage("Clipboard is empty or contains non-text data.");
+                }
+            }
+            catch
+            {
+                AddMessage("Could not read clipboard.");
+            }
+        }
 
         // ═══════════════════════════════════════
         // SEARCH MENU — inline dialog overlays
@@ -594,6 +655,16 @@ namespace C.Compiler
         private async void LinkExe_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); await CompileCurrentFileAsync(compileOnly: false); AddMessage("Link: TCC links in a single step with Make."); }
         private async void BuildAll_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); await CompileCurrentFileAsync(compileOnly: false); }
 
+        private void CompilePrimaryFile_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            var primary = _compilerService.Settings.PrimarySourceFile;
+            if (!string.IsNullOrEmpty(primary))
+                AddMessage($"Primary C file is set to: {primary}. Configure via Options > Make.");
+            else
+                AddMessage("No primary C file set. Configure via Options > Make, or open the file you want to compile.");
+        }
+
         private void GetInfo_Click(object sender, RoutedEventArgs e)
         {
             CloseAllMenus();
@@ -647,6 +718,34 @@ namespace C.Compiler
         }
 
         // ═══════════════════════════════════════
+        // DEBUG MENU
+        // ═══════════════════════════════════════
+
+        private void DebugEvaluate_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            AddMessage("Evaluate/Modify: Debugger not integrated. Compile with -g and attach GDB for watch expressions.");
+        }
+
+        private void DebugWatches_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            AddMessage("Watches: Debugger not integrated. Variable watching requires GDB integration.");
+        }
+
+        private void DebugToggleBreakpoint_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            AddMessage("Toggle Breakpoint: Debugger not integrated. Breakpoints require GDB integration.");
+        }
+
+        private void DebugBreakpoints_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            AddMessage("Breakpoints: Debugger not integrated. Requires GDB integration.");
+        }
+
+        // ═══════════════════════════════════════
         // RUN MENU
         // ═══════════════════════════════════════
 
@@ -683,6 +782,19 @@ namespace C.Compiler
         }
 
         private void DlgArguments_Cancel(object sender, RoutedEventArgs e) => ArgumentsDialogOverlay.Visibility = Visibility.Collapsed;
+
+        private void RunReset_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            _lastCompiledExePath = null;
+            _currentErrors.Clear();
+            ClearMessages();
+            AddMessage("Program reset. Compile to rebuild.");
+        }
+
+        private void RunGoToCursor_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Go to Cursor (F4): Requires GDB integration."); }
+        private void RunTraceInto_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Trace Into (F7): Requires GDB integration."); }
+        private void RunStepOver_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Step Over (F8): Requires GDB integration."); }
 
         // ═══════════════════════════════════════
         // OPTIONS MENU — inline dialog
@@ -794,11 +906,148 @@ namespace C.Compiler
         }
 
         private void DlgDirectories_Cancel(object sender, RoutedEventArgs e) => DirectoriesDialogOverlay.Visibility = Visibility.Collapsed;
+
+        // ═══════════════════════════════════════
+        // OPTIONS > LINKER
+        // ═══════════════════════════════════════
+
+        private void OptionsLinker_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            DlgLinkerFlags.Text = _compilerService.Settings.LinkerFlags;
+            DlgLinkerMapFile.Text = _compilerService.Settings.GenerateMapFile ? "yes" : "no";
+            LinkerDialogOverlay.Visibility = Visibility.Visible;
+        }
+
+        private async void DlgLinker_OK(object sender, RoutedEventArgs e)
+        {
+            LinkerDialogOverlay.Visibility = Visibility.Collapsed;
+            _compilerService.Settings.LinkerFlags = DlgLinkerFlags.Text.Trim();
+            _compilerService.Settings.GenerateMapFile = DlgLinkerMapFile.Text.Trim().Equals("yes", StringComparison.OrdinalIgnoreCase);
+            _settingsService.Settings.Compiler = _compilerService.Settings;
+            await _settingsService.SaveAsync();
+            AddMessage("Linker options saved.");
+        }
+
+        private void DlgLinker_Cancel(object sender, RoutedEventArgs e) => LinkerDialogOverlay.Visibility = Visibility.Collapsed;
+
+        // ═══════════════════════════════════════
+        // OPTIONS > MAKE
+        // ═══════════════════════════════════════
+
+        private void OptionsMake_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            DlgMakePrimaryFile.Text = _compilerService.Settings.PrimarySourceFile;
+            DlgMakeWarnings.Text = _compilerService.Settings.WarningsAsErrors ? "yes" : "no";
+            MakeDialogOverlay.Visibility = Visibility.Visible;
+        }
+
+        private async void DlgMake_OK(object sender, RoutedEventArgs e)
+        {
+            MakeDialogOverlay.Visibility = Visibility.Collapsed;
+            _compilerService.Settings.PrimarySourceFile = DlgMakePrimaryFile.Text.Trim();
+            _compilerService.Settings.WarningsAsErrors = DlgMakeWarnings.Text.Trim().Equals("yes", StringComparison.OrdinalIgnoreCase);
+            _settingsService.Settings.Compiler = _compilerService.Settings;
+            await _settingsService.SaveAsync();
+            AddMessage("Make options saved.");
+        }
+
+        private void DlgMake_Cancel(object sender, RoutedEventArgs e) => MakeDialogOverlay.Visibility = Visibility.Collapsed;
+
+        // ═══════════════════════════════════════
+        // OPTIONS > ARGUMENTS (program arguments)
+        // ═══════════════════════════════════════
+
+        private void OptionsArguments_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            DlgArgumentsBox.Text = _programArguments;
+            ArgumentsDialogOverlay.Visibility = Visibility.Visible;
+            DlgArgumentsBox.Focus(FocusState.Programmatic);
+        }
+
+        // ═══════════════════════════════════════
+        // OPTIONS > ENVIRONMENT
+        // ═══════════════════════════════════════
+
+        private void OptionsEnvironment_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            ClearMessages();
+            AddMessage("═══ Environment ═══");
+            AddMessage($"OS:          {Environment.OSVersion}");
+            AddMessage($"Machine:     {Environment.MachineName}");
+            AddMessage($"User:        {Environment.UserName}");
+            AddMessage($"CPU cores:   {Environment.ProcessorCount}");
+            AddMessage($"Temp dir:    {Path.GetTempPath()}");
+            AddMessage($"Working dir: {Environment.CurrentDirectory}");
+            AddMessage($"Compiler:    {_compilerService.DetectedCompilerType} — {_compilerService.DetectedCompilerPath ?? "(none)"}");
+        }
+
+        // ═══════════════════════════════════════
+        // OPTIONS > SAVE / RETRIEVE
+        // ═══════════════════════════════════════
+
+        private async void OptionsSaveOptions_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            _settingsService.Settings.Compiler = _compilerService.Settings;
+            await _settingsService.SaveAsync();
+            AddMessage("Options saved to disk.");
+        }
+
+        private async void OptionsRetrieveOptions_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            await _settingsService.LoadAsync();
+            _compilerService.Settings = _settingsService.Settings.Compiler;
+            _compilerService.DetectCompiler();
+            AddMessage("Options retrieved from disk.");
+        }
+
+        // ═══════════════════════════════════════
+        // PROJECT MENU
+        // ═══════════════════════════════════════
+
+        private void ProjectOpen_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Open Project: Project system not yet implemented. Use File > Open for individual .C files."); }
+        private void ProjectClose_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Close Project: No project currently open."); }
+        private void ProjectAddItem_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Add Item: Project system not yet implemented."); }
+        private void ProjectDeleteItem_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Delete Item: Project system not yet implemented."); }
+        private void ProjectLocalOptions_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Local Options: Project system not yet implemented."); }
+        private void ProjectIncludeFiles_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Include Files: Project system not yet implemented. Use #include directives in your source."); }
+
+        // ═══════════════════════════════════════
+        // SYSTEM MENU
+        // ═══════════════════════════════════════
+
+        private void SysClearDesktop_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            ClearMessages();
+            AddMessage("Desktop cleared.");
+        }
+
+        private void SysRepaintDesktop_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            // Force a layout pass by toggling then restoring a value
+            RootGrid.InvalidateArrange();
+            AddMessage("Desktop repainted.");
+        }
         private void ToggleMessageWindow_Click(object sender, RoutedEventArgs e)
         {
             CloseAllMenus();
             MessagePanel.Visibility = MessagePanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
+
+        private void WindowSizeMove_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Size/Move: Window resizing is handled by the OS title bar. Drag the window edge to resize."); }
+        private void WindowZoom_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Zoom: Use the OS maximize button in the title bar."); }
+        private void WindowTile_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Tile: Multi-window tiling is not supported. Use tabs to switch between open files."); }
+        private void WindowCascade_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Cascade: Multi-window cascading is not supported. Use tabs to switch between open files."); }
+        private void WindowOutput_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); ToggleMessageWindow_Click(sender, e); }
+        private void WindowWatch_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Watch Panel: Requires GDB integration for variable watching."); }
+        private void WindowRegister_Click(object sender, RoutedEventArgs e) { CloseAllMenus(); AddMessage("Register Panel: Requires GDB integration for register inspection."); }
 
         // ═══════════════════════════════════════
         // HELP MENU
@@ -865,6 +1114,165 @@ namespace C.Compiler
             AddMessage("<math.h>    sin  cos  tan  sqrt  pow  abs  ceil  floor  log");
             AddMessage("<ctype.h>   isalpha  isdigit  isalnum  toupper  tolower  isspace");
             AddMessage("<time.h>    time  clock  difftime  localtime  strftime");
+        }
+
+        // ═══════════════════════════════════════
+        // SEARCH > FIND PROCEDURE
+        // ═══════════════════════════════════════
+
+        private void FindProcedure_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            DlgFindProcedureBox.Text = string.Empty;
+            FindProcedureDialogOverlay.Visibility = Visibility.Visible;
+            DlgFindProcedureBox.Focus(FocusState.Programmatic);
+        }
+
+        private void DlgFindProcedure_OK(object sender, RoutedEventArgs e)
+        {
+            FindProcedureDialogOverlay.Visibility = Visibility.Collapsed;
+            string name = DlgFindProcedureBox.Text.Trim();
+            if (string.IsNullOrEmpty(name)) return;
+
+            var text = ActiveEditor.GetText();
+            var lines = text.Split('\n');
+            // Match lines that look like a function definition containing the name followed by '('
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i].TrimStart();
+                if (line.Contains(name + "(") && !line.TrimStart().StartsWith("//") && !line.TrimStart().StartsWith("*"))
+                {
+                    ActiveEditor.GoToLine(i + 1);
+                    AddMessage($"Found procedure '{name}' at line {i + 1}.");
+                    return;
+                }
+            }
+            AddMessage($"Procedure '{name}' not found in current file.");
+        }
+
+        private void DlgFindProcedure_Cancel(object sender, RoutedEventArgs e) => FindProcedureDialogOverlay.Visibility = Visibility.Collapsed;
+
+        // ═══════════════════════════════════════
+        // HELP > TOPIC SEARCH / PREVIOUS / ON HELP
+        // ═══════════════════════════════════════
+
+        private void HelpTopicSearch_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            DlgTopicSearchBox.Text = string.Empty;
+            TopicSearchDialogOverlay.Visibility = Visibility.Visible;
+            DlgTopicSearchBox.Focus(FocusState.Programmatic);
+        }
+
+        private void DlgTopicSearch_OK(object sender, RoutedEventArgs e)
+        {
+            TopicSearchDialogOverlay.Visibility = Visibility.Collapsed;
+            string topic = DlgTopicSearchBox.Text.Trim();
+            if (string.IsNullOrEmpty(topic)) return;
+            _lastHelpTopic = topic;
+            ShowHelpForTopic(topic);
+        }
+
+        private void DlgTopicSearch_Cancel(object sender, RoutedEventArgs e) => TopicSearchDialogOverlay.Visibility = Visibility.Collapsed;
+
+        private void HelpPreviousTopic_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            if (string.IsNullOrEmpty(_lastHelpTopic))
+                HelpContents_Click(sender, e);
+            else
+                ShowHelpForTopic(_lastHelpTopic);
+        }
+
+        private void HelpOnHelp_Click(object sender, RoutedEventArgs e)
+        {
+            CloseAllMenus();
+            ClearMessages();
+            AddMessage("═══ Help on Help ═══");
+            AddMessage("");
+            AddMessage("  F1              Help Contents — keyboard shortcuts and menu summary");
+            AddMessage("  Shift+F1       Help Index — C keywords and standard library reference");
+            AddMessage("  Ctrl+F1        Topic Search — look up a specific function or keyword");
+            AddMessage("  Alt+F1         Previous Topic — return to the last viewed help topic");
+            AddMessage("");
+            AddMessage("  Tip: Click any error in the message panel to jump to that line.");
+            AddMessage("  Tip: Use Search > Find Procedure to jump to a function definition.");
+        }
+
+        private void ShowHelpForTopic(string topic)
+        {
+            var topics = new System.Collections.Generic.Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["printf"]    = new[] { "printf — Formatted output to stdout", "  int printf(const char *format, ...);", "  Formats and prints to standard output. Returns number of chars written." },
+                ["scanf"]     = new[] { "scanf — Formatted input from stdin", "  int scanf(const char *format, ...);", "  Reads formatted data from stdin. Returns number of items read." },
+                ["fprintf"]   = new[] { "fprintf — Formatted output to a file", "  int fprintf(FILE *stream, const char *format, ...);", "  Like printf, but writes to the given file stream." },
+                ["fscanf"]    = new[] { "fscanf — Formatted input from a file", "  int fscanf(FILE *stream, const char *format, ...);", "  Like scanf, but reads from the given file stream." },
+                ["fopen"]     = new[] { "fopen — Open a file", "  FILE *fopen(const char *path, const char *mode);", "  Modes: \"r\" read, \"w\" write, \"a\" append, \"rb\"/\"wb\" binary. Returns NULL on failure." },
+                ["fclose"]    = new[] { "fclose — Close a file", "  int fclose(FILE *stream);", "  Closes file and flushes buffers. Returns 0 on success." },
+                ["fgets"]     = new[] { "fgets — Read a line from a file", "  char *fgets(char *s, int n, FILE *stream);", "  Reads up to n-1 characters. Returns NULL on error/EOF." },
+                ["fputs"]     = new[] { "fputs — Write a string to a file", "  int fputs(const char *s, FILE *stream);", "  Writes string s to stream (no null terminator)." },
+                ["malloc"]    = new[] { "malloc — Allocate memory", "  void *malloc(size_t size);", "  Allocates size bytes (uninitialized). Returns NULL on failure. Free with free()." },
+                ["calloc"]    = new[] { "calloc — Allocate zero-initialized memory", "  void *calloc(size_t n, size_t size);", "  Allocates n*size bytes, all initialized to zero." },
+                ["realloc"]   = new[] { "realloc — Resize allocated memory", "  void *realloc(void *ptr, size_t size);", "  Resizes the block pointed to by ptr to size bytes." },
+                ["free"]      = new[] { "free — Free allocated memory", "  void free(void *ptr);", "  Releases memory allocated by malloc/calloc/realloc." },
+                ["strlen"]    = new[] { "strlen — String length", "  size_t strlen(const char *s);", "  Returns number of characters before the null terminator." },
+                ["strcpy"]    = new[] { "strcpy — Copy string", "  char *strcpy(char *dest, const char *src);", "  Copies src to dest including null terminator. Returns dest." },
+                ["strcat"]    = new[] { "strcat — Concatenate strings", "  char *strcat(char *dest, const char *src);", "  Appends src to dest. Returns dest." },
+                ["strcmp"]    = new[] { "strcmp — Compare strings", "  int strcmp(const char *s1, const char *s2);", "  Returns 0 if equal, <0 if s1<s2, >0 if s1>s2." },
+                ["strchr"]    = new[] { "strchr — Find character in string", "  char *strchr(const char *s, int c);", "  Returns pointer to first occurrence of c, or NULL." },
+                ["strstr"]    = new[] { "strstr — Find substring", "  char *strstr(const char *haystack, const char *needle);", "  Returns pointer to first occurrence of needle, or NULL." },
+                ["memcpy"]    = new[] { "memcpy — Copy memory", "  void *memcpy(void *dest, const void *src, size_t n);", "  Copies n bytes. Regions must not overlap." },
+                ["memset"]    = new[] { "memset — Fill memory", "  void *memset(void *s, int c, size_t n);", "  Fills n bytes of s with byte value c." },
+                ["sqrt"]      = new[] { "sqrt — Square root", "  double sqrt(double x);", "  Returns square root of x. Requires <math.h>." },
+                ["pow"]       = new[] { "pow — Power", "  double pow(double base, double exp);", "  Returns base raised to exp. Requires <math.h>." },
+                ["sin"]       = new[] { "sin — Sine", "  double sin(double x);", "  Returns sine of x (radians). Requires <math.h>." },
+                ["cos"]       = new[] { "cos — Cosine", "  double cos(double x);", "  Returns cosine of x (radians). Requires <math.h>." },
+                ["tan"]       = new[] { "tan — Tangent", "  double tan(double x);", "  Returns tangent of x (radians). Requires <math.h>." },
+                ["ceil"]      = new[] { "ceil — Round up", "  double ceil(double x);", "  Returns smallest integer >= x. Requires <math.h>." },
+                ["floor"]     = new[] { "floor — Round down", "  double floor(double x);", "  Returns largest integer <= x. Requires <math.h>." },
+                ["abs"]       = new[] { "abs — Absolute value (int)", "  int abs(int n);", "  Returns absolute value of n. Requires <stdlib.h>." },
+                ["atoi"]      = new[] { "atoi — String to integer", "  int atoi(const char *s);", "  Converts string to int. Non-numeric characters stop parsing." },
+                ["atof"]      = new[] { "atof — String to double", "  double atof(const char *s);", "  Converts string to double." },
+                ["exit"]      = new[] { "exit — Terminate program", "  void exit(int status);", "  Terminates program, flushing buffers. status 0 = success." },
+                ["isalpha"]   = new[] { "isalpha — Test if alphabetic", "  int isalpha(int c);", "  Non-zero if c is A-Z or a-z. Requires <ctype.h>." },
+                ["isdigit"]   = new[] { "isdigit — Test if digit", "  int isdigit(int c);", "  Non-zero if c is 0-9. Requires <ctype.h>." },
+                ["isspace"]   = new[] { "isspace — Test if whitespace", "  int isspace(int c);", "  Non-zero if c is space/tab/newline/etc. Requires <ctype.h>." },
+                ["toupper"]   = new[] { "toupper — Convert to uppercase", "  int toupper(int c);", "  Returns uppercase equivalent of c. Requires <ctype.h>." },
+                ["tolower"]   = new[] { "tolower — Convert to lowercase", "  int tolower(int c);", "  Returns lowercase equivalent of c. Requires <ctype.h>." },
+                ["time"]      = new[] { "time — Get current time", "  time_t time(time_t *t);", "  Returns current calendar time. Requires <time.h>." },
+                ["clock"]     = new[] { "clock — Processor time used", "  clock_t clock(void);", "  Divide by CLOCKS_PER_SEC for elapsed seconds. Requires <time.h>." },
+                ["localtime"] = new[] { "localtime — Convert to local time", "  struct tm *localtime(const time_t *timep);", "  Converts time_t to broken-down local time struct. Requires <time.h>." },
+                ["strftime"]  = new[] { "strftime — Format time as string", "  size_t strftime(char *s, size_t max, const char *format, const struct tm *tm);", "  Formats time struct into string, e.g. \"%Y-%m-%d %H:%M:%S\"." },
+            };
+
+            ClearMessages();
+            AddMessage($"═══ Help: {topic} ═══");
+            bool found = false;
+            foreach (var kvp in topics)
+            {
+                if (kvp.Key.IndexOf(topic, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    topic.IndexOf(kvp.Key, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    foreach (var line in kvp.Value) AddMessage(line);
+                    AddMessage("");
+                    found = true;
+                }
+            }
+            var keywords = new[] { "auto", "break", "case", "char", "const", "continue", "default", "do",
+                "double", "else", "enum", "extern", "float", "for", "goto", "if", "int", "long",
+                "register", "return", "short", "signed", "sizeof", "static", "struct", "switch",
+                "typedef", "union", "unsigned", "void", "volatile", "while" };
+            foreach (var kw in keywords)
+            {
+                if (kw.Equals(topic, StringComparison.OrdinalIgnoreCase))
+                {
+                    AddMessage($"{kw} — C keyword. See a C language reference for syntax details.");
+                    AddMessage("");
+                    found = true;
+                }
+            }
+            if (!found)
+                AddMessage($"No help found for '{topic}'. Try: printf, malloc, strlen, fopen, sin, if, for, struct...");
         }
 
         // ═══════════════════════════════════════

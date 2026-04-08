@@ -157,6 +157,11 @@ namespace C.Compiler.Controls
             CodeEditor.Document.Selection.TypeText(string.Empty);
         }
 
+        public void InsertText(string text)
+        {
+            CodeEditor.Document.Selection.TypeText(text);
+        }
+
         public bool Find(string searchText, bool caseSensitive, bool wholeWord)
         {
             if (string.IsNullOrEmpty(searchText)) return false;
